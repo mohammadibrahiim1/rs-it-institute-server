@@ -41,9 +41,18 @@ async function run() {
 
     // get all instructors
     app.get(`/api/v1/instructors`, async (req, res) => {
-      const cursor = instructorsCollection.find({});
-      const result = await cursor.toArray();
-      res.send({ status: true, items: result.length, data: result });
+      const { category } = req.query;
+      try {
+        if (!category) {
+          const result = await instructorsCollection.find({}).toArray();
+          return res.json({ status: true, data: result });
+        } else {
+          const filteredData = await instructorsCollection.find({ category }).toArray();
+          return res.send({ status: true, data: filteredData });
+        }
+      } catch (error) {
+        return res.status(500).json({ error: `Inter server error` });
+      }
     });
 
     // app.put("/updateInstructorCategory", async (req, res) => {
