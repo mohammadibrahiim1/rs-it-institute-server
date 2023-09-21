@@ -29,13 +29,32 @@ async function run() {
 
   const db = client.db("rsItInstitute");
   const categoryCollection = db.collection("course-category");
+  const instructorsCollection = db.collection("instructors");
 
   try {
+    // get all categories
     app.get(`/api/v1/categories`, async (req, res) => {
       const cursor = categoryCollection.find({});
       const result = await cursor.toArray();
       res.send({ status: true, items: result.length, data: result });
     });
+
+    // get all instructors
+    app.get(`/api/v1/instructors`, async (req, res) => {
+      const cursor = instructorsCollection.find({});
+      const result = await cursor.toArray();
+      res.send({ status: true, items: result.length, data: result });
+    });
+
+    // app.put("/updateInstructorCategory", async (req, res) => {
+    //   try {
+    //     const { category } = req.body;
+    //     const result = await instructorsCollection.updateMany({}, { $set: { course: category } });
+    //     return res.json({ message: `${result.modifiedCount} documents updated` });
+    //   } catch (error) {
+    //     return res.status(500).json({ error: "Internal server error" });
+    //   }
+    // });
   } finally {
   }
 }
