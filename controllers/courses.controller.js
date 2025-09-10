@@ -6,14 +6,13 @@ const getAllCourses = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const search = req.query.search?.trim() || "";
 
-    const courseDoc = await Courses.findOne(); // এবার পাবে
+    const courseDoc = await Courses.findOne();
 
-    console.log(courseDoc);
 
     if (!courseDoc) {
       return res.status(404).json({
         status: false,
-        message: "Course data not found",
+        message: "Course not found. Please check the course ID and try again.",
       });
     }
 
@@ -37,9 +36,8 @@ const getAllCourses = async (req, res) => {
       totalPages,
     };
 
-    return res.json({ status: true, data: response });
+    return res.json({ status: "success", data: response });
   } catch (error) {
-    console.error("Error fetching institute info:", error);
     res.status(500).json({ status: false, message: "Internal Server Error" });
   }
 };
